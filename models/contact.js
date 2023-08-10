@@ -1,6 +1,8 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
+const { mongooseHandleError } = require("../helpers");
+
 const contactSchema = new Schema(
   {
     name: {
@@ -13,21 +15,22 @@ const contactSchema = new Schema(
     },
     phone: {
       type: String,
-      match: /^\(\d{3}\)\d{3}-\d{2}-\d{2}$/,
       required: [true, "Set phone for contact"],
     },
     favorite: {
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
 
-contactSchema.post("save", (error, data, next) => {
-  error.status = 400;
-  next();
-});
+contactSchema.post("save", mongooseHandleError);
 
 const addSchema = Joi.object({
   name: Joi.string().min(3).max(30).required(),
@@ -38,7 +41,7 @@ const addSchema = Joi.object({
 
 const updateFavoriteSchema = Joi.object({
   favorite: Joi.boolean().required().messages({
-    "any.required": "missing field favorite",
+    "any.required": "Missing field favorite",
   }),
 });
 

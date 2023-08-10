@@ -14,6 +14,3 @@ mongoose
     console.log(error.message);
     process.exit(1);
   });
-
-  // const DB_HOST = "mongodb+srv://Oleh-Syvoenko:oJZRkSUoXjBdqXoY@cluster0.jyyzqvy.mongodb.net/db-contacts?retryWrites=true&w=majority";
-  // oJZRkSUoXjBdqXoY
